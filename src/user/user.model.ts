@@ -13,7 +13,7 @@ export class UserModel extends TimeStamps {
   @prop()
   passwordHash: string;
 
-  @prop()
+  @prop({ default: null })
   profilePicture: string;
 
   @prop({ type: () => [String] })
@@ -22,9 +22,9 @@ export class UserModel extends TimeStamps {
   @prop({ type: () => [String] })
   followings: string[];
 
-  @prop()
+  @prop({ default: null })
   city: string;
 
-  @prop()
+  @prop({ default: null })
   description: string;
 }

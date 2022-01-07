@@ -19,7 +19,8 @@ export class AuthService {
     username,
     password,
   }: RegisterDto): Promise<
-    DocumentType<Pick<UserModel, 'email' | 'username' | 'passwordHash'>>> {
+    DocumentType<Pick<UserModel, 'email' | 'username' | 'passwordHash'>>
+  > {
     const salt = await genSalt(10);
     const newUser = new this.userModel({
       email,
