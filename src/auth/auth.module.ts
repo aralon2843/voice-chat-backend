@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UserModel } from './user.model';
+import { UserModel } from '../user/user.model';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { getJWTConfig } from 'src/configs/jwt.config';

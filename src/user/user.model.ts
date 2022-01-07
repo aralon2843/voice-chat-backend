@@ -12,4 +12,19 @@ export class UserModel extends TimeStamps {
 
   @prop()
   passwordHash: string;
+
+  @prop()
+  profilePicture: string;
+
+  @prop({ type: () => [String] })
+  followers: string[];
+
+  @prop({ type: () => [String] })
+  followings: string[];
+
+  @prop()
+  city: string;
+
+  @prop()
+  description: string;
 }

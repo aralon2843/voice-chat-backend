@@ -2,7 +2,7 @@ import { RegisterDto } from './dto/register.dto';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ModelType, DocumentType } from '@typegoose/typegoose/lib/types';
 import { InjectModel } from 'nestjs-typegoose';
-import { UserModel } from './user.model';
+import { UserModel } from '../user/user.model';
 import { compare, genSalt, hash } from 'bcryptjs';
 import { USER_NOT_FOUND_ERROR, WRONG_PASSWORD_ERROR } from './auth.constants';
 import { JwtService } from '@nestjs/jwt';
@@ -18,7 +18,8 @@ export class AuthService {
     email,
     username,
     password,
-  }: RegisterDto): Promise<DocumentType<UserModel>> {
+  }: RegisterDto): Promise<
+    DocumentType<Pick<UserModel, 'email' | 'username' | 'passwordHash'>>> {
     const salt = await genSalt(10);
     const newUser = new this.userModel({
       email,
