@@ -32,7 +32,12 @@ export class AuthController {
       throw new BadRequestException(ALREADY_REGISTERED_USERNAME_ERROR);
     }
 
-    return this.authService.createUser(dto);
+    const user = await this.authService.createUser(dto);
+
+    return {
+      email: user.email,
+      id: user._id,
+    };
   }
 
   @UsePipes(new ValidationPipe())
