@@ -2,9 +2,14 @@ import {
   CANNOT_FOLLOW_YOURSELF_ERROR,
   CANNOT_UNFOLLOW_YOURSELF_ERROR,
   USER_ALREADY_FOLLOWED_ERROR,
+  USER_NOT_FOUND_ERROR,
   YOU_DONT_FOLLOW_THIS_USER_ERROR,
 } from './user.constants';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ModelType, DocumentType } from '@typegoose/typegoose/lib/types';
 import { InjectModel } from 'nestjs-typegoose';
 import { UserModel } from './user.model';
@@ -55,5 +60,15 @@ export class UserService {
     }
 
     return currentUser;
+  }
+
+  async getUser(id: string) {
+    const user = await this.userModel.findById(id);
+
+    if (!user) {
+      throw new NotFoundException(USER_NOT_FOUND_ERROR);
+    }
+
+    return user;
   }
 }

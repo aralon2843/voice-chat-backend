@@ -1,5 +1,5 @@
 import { UserService } from './user.service';
-import { Body, Controller, Param, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FollowUnfollowDto } from './dto/follow-unfollow.dto';
 
@@ -17,5 +17,11 @@ export class UserController {
   @Put(':id/unfollow')
   async unfollow(@Body() dto: FollowUnfollowDto, @Param('id') userId: string) {
     return this.userService.unfollow(dto.currentId, userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get(':id')
+  async getUser(@Param('id') id: string) {
+    return this.userService.getUser(id)
   }
 }
