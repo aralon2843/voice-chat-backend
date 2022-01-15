@@ -61,14 +61,17 @@ export class UserService {
 
     return currentUser;
   }
-
   async getUser(id: string) {
-    const user = await this.userModel.findById(id);
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      const user = await this.userModel.findById(id);
 
-    if (!user) {
-      throw new NotFoundException(USER_NOT_FOUND_ERROR);
+      if (!user) {
+        throw new NotFoundException(USER_NOT_FOUND_ERROR);
+      }
+
+      return user;
     }
 
-    return user;
+    throw new NotFoundException(USER_NOT_FOUND_ERROR);
   }
 }

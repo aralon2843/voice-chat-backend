@@ -26,7 +26,6 @@ import { UserModel } from './user.model';
       inject: [ConfigService],
       useFactory: getJWTConfig,
     }),
-    PassportModule,
   ],
   controllers: [UserController],
 })
