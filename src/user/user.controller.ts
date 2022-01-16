@@ -22,6 +22,12 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   async getUser(@Param('id') id: string) {
-    return this.userService.getUser(id)
+    return this.userService.getUser(id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/all/:id')
+  async getAllUsers(@Param('id') id: string) {
+    return this.userService.getAllUsers(id);
   }
 }

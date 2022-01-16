@@ -61,7 +61,8 @@ export class UserService {
 
     return currentUser;
   }
-  async getUser(id: string) {
+
+  async getUser(id: string): Promise<DocumentType<UserModel>> {
     if (id.match(/^[0-9a-fA-F]{24}$/)) {
       const user = await this.userModel.findById(id);
 
@@ -72,6 +73,13 @@ export class UserService {
       return user;
     }
 
+    throw new NotFoundException(USER_NOT_FOUND_ERROR);
+  }
+
+  async getAllUsers(id: string): Promise<DocumentType<UserModel>[]> {
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      return this.userModel.find({ _id: { $ne: id } }).exec();
+    }
     throw new NotFoundException(USER_NOT_FOUND_ERROR);
   }
 }
