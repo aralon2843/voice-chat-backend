@@ -92,7 +92,9 @@ export class UserService {
   ): Promise<UploadProfilePicture> {
     if (id.match(/^[0-9a-fA-F]{24}$/)) {
       const uploadFolder = `${path}/uploads/${id}`;
+
       await ensureDir(uploadFolder);
+
       await writeFile(
         `${uploadFolder}/${picture.originalname}`,
         picture.buffer,
@@ -103,6 +105,7 @@ export class UserService {
           $set: { profilePicture: `${id}/${picture.originalname}` },
         })
         .exec();
+
       return {
         url: `${id}/${picture.originalname}`,
         name: picture.originalname,

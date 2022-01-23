@@ -7,6 +7,8 @@ import { TypegooseModule } from 'nestjs-typegoose';
 import { PassportModule } from '@nestjs/passport';
 import { getJWTConfig } from 'src/configs/jwt.config';
 import { UserModel } from './user.model';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { path } from 'app-root-path';
 
 @Module({
   providers: [UserService],
@@ -19,6 +21,9 @@ import { UserModel } from './user.model';
         },
       },
     ]),
+    ServeStaticModule.forRoot({
+      rootPath: `${path}/uploads`,
+    }),
     ConfigModule,
     PassportModule,
     JwtModule.registerAsync({
