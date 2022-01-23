@@ -13,6 +13,9 @@ import {
 import { ModelType, DocumentType } from '@typegoose/typegoose/lib/types';
 import { InjectModel } from 'nestjs-typegoose';
 import { UserModel } from './user.model';
+import { path } from 'app-root-path';
+import { ensureDir, writeFile } from 'fs-extra';
+import { UploadProfilePicture } from './dto/upload-profile-picture.response';
 
 @Injectable()
 export class UserService {
@@ -79,6 +82,31 @@ export class UserService {
   async getAllUsers(id: string): Promise<DocumentType<UserModel>[]> {
     if (id.match(/^[0-9a-fA-F]{24}$/)) {
       return this.userModel.find({ _id: { $ne: id } }).exec();
+    }
+    throw new NotFoundException(USER_NOT_FOUND_ERROR);
+  }
+
+  async uploadProfilePicture(
+    id: string,
+    picture: Pick<Express.Multer.File, 'originalname' | 'buffer'>,
+  ): Promise<UploadProfilePicture> {
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      const uploadFolder = `${path}/uploads/${id}`;
+      await ensureDir(uploadFolder);
+      await writeFile(
+        `${uploadFolder}/${picture.originalname}`,
+        picture.buffer,
+      );
+
+      await this.userModel
+        .findByIdAndUpdate(id, {
+          $set: { profilePicture: `${id}/${picture.originalname}` },
+        })
+        .exec();
+      return {
+        url: `${id}/${picture.originalname}`,
+        name: picture.originalname,
+      };
     }
     throw new NotFoundException(USER_NOT_FOUND_ERROR);
   }

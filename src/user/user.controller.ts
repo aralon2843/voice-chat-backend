@@ -1,7 +1,18 @@
 import { UserService } from './user.service';
-import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FollowUnfollowDto } from './dto/follow-unfollow.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
 export class UserController {
@@ -29,5 +40,15 @@ export class UserController {
   @Get('/all/:id')
   async getAllUsers(@Param('id') id: string) {
     return this.userService.getAllUsers(id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('upload-picture/:id')
+  async uploadProfilePicture(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('id') id: string,
+  ) {
+    return this.userService.uploadProfilePicture(id, file);
   }
 }
