@@ -61,8 +61,12 @@ export class AuthService {
     const user = await this.findUserByUsername(username);
     return {
       access_token: await this.jwtService.signAsync(payload),
-      id: user.id,
-      username,
+      user: {
+        _id: user._id,
+        email: user.email,
+        username: user.username,
+        profilePicture: user.profilePicture,
+      },
     };
   }
 }
