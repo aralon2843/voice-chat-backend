@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { ChatModule } from './chat/chat.module';
 import { ChatGateway } from './chat/chat.gateway';
+import { DialogModule } from './dialog/dialog.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ChatGateway } from './chat/chat.gateway';
     UserModule,
     PostModule,
     ChatModule,
+    DialogModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],
