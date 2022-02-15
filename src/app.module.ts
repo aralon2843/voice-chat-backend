@@ -7,8 +7,8 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
-import { ChatModule } from './chat/chat.module';
-import { ChatGateway } from './chat/chat.gateway';
+import { MessageModule } from './message/message.module';
+import { MessageGateway } from './message/message.gateway';
 import { DialogModule } from './dialog/dialog.module';
 
 @Module({
@@ -22,10 +22,10 @@ import { DialogModule } from './dialog/dialog.module';
     AuthModule,
     UserModule,
     PostModule,
-    ChatModule,
+    MessageModule,
     DialogModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ChatGateway],
+  providers: [AppService],
 })
 export class AppModule {}

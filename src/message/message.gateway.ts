@@ -6,17 +6,18 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { MessageService } from './message.service';
 
-@WebSocketGateway({ cors: true, namespace: '/chat' })
-export class ChatGateway
+@WebSocketGateway({ cors: true, namespace: '/message' })
+export class MessageGateway
   implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
 {
+  constructor(private readonly messageService: MessageService) {}
   @WebSocketServer() wss: Server;
 
-  private logger: Logger = new Logger('ChatGateway');
+  private logger: Logger = new Logger('MessageGateway');
 
   afterInit(server: Server) {
     this.logger.log('Initialized');
@@ -31,12 +32,13 @@ export class ChatGateway
   }
 
   @SubscribeMessage('messageToServer')
-  handleMessage(
+  async handleMessage(
     client: Socket,
-    message: { sender: string; dialog: string; body: string },
+    message: { sender: string; dialogId: string; body: string },
   ) {
     console.log(message);
-    this.wss.to(message.dialog).emit('messageToClient', message.body);
+    const sendedMessage = await this.messageService.createMessage(message);
+    this.wss.to(message.dialogId).emit('messageToClient', sendedMessage);
   }
 
   @SubscribeMessage('joinDialog')
