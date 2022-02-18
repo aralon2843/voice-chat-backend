@@ -38,6 +38,7 @@ export class MessageGateway
   ) {
     console.log(message);
     const sendedMessage = await this.messageService.createMessage(message);
+    console.log(sendedMessage.createdAt)
     this.wss.to(message.dialogId).emit('messageToClient', sendedMessage);
   }
 
